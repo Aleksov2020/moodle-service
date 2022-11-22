@@ -1,17 +1,10 @@
-DROP TABLE IF EXISTS grp_list;
-DROP TABLE IF EXISTS usr;
-DROP TABLE IF EXISTS grp;
-DROP TABLE IF EXISTS task;
-
-CREATE TABLE IF NOT EXISTS usr
-(
-    usr_id bigserial PRIMARY KEY,
-    username varchar(128) NOT NULL,
-    first_name varchar(128) NOT NULL,
-    last_name varchar(128),
-    middle_name varchar(128),
-    group_id bigint
-);
+DROP TABLE IF EXISTS grp_list CASCADE;
+DROP TABLE IF EXISTS task CASCADE;
+DROP TABLE IF EXISTS authorities CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS grp CASCADE;
+DROP TABLE IF EXISTS user_role;
 
 CREATE TABLE IF NOT EXISTS grp
 (
@@ -20,20 +13,21 @@ CREATE TABLE IF NOT EXISTS grp
     group_description varchar(128)
 );
 
-CREATE TABLE IF NOT EXISTS grp_list
+CREATE TABLE IF NOT EXISTS users
 (
-    group_list_id bigserial  PRIMARY KEY,
-    group_id bigserial,
-    usr_id bigserial,
+    id bigserial PRIMARY KEY,
+    username varchar(128) NOT NULL unique,
+    password varchar(512) NOT NULL,
+    first_name varchar(128),
+    last_name varchar(128),
+    middle_name varchar(128),
+    group_id bigint,
+
+    enabled boolean not null,
 
     CONSTRAINT fk_group
         FOREIGN KEY(group_id)
             REFERENCES grp(group_id)
-            ON DELETE SET NULL,
-
-    CONSTRAINT fk_usr
-        FOREIGN KEY(usr_id)
-            REFERENCES usr(usr_id)
             ON DELETE SET NULL
 );
 

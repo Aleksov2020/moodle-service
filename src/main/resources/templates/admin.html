@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <title>Admin Page</title>
+</head>
+<body>
+<h3 th:inline="text">You have been logged as [[${#httpServletRequest.remoteUser}]]!</h3>
+
+<div th:if="not ${addGroupSuccess} or not ${addUserSuccess}">
+    <form th:action="@{/new-group}" method="post">
+        <input type="text" name="groupNumber" placeholder="groupNumber">
+        <input type="text" name="shortDescription" placeholder="shortDescription">
+        <input type="submit" value="Create group"/>
+    </form>
+
+    <form th:action="@{/new-user}" method="post">
+        <input type="text" name="username" placeholder="username">
+        <input type="text" name="password" placeholder="password">
+        <select id="group" name="groupId">
+            <option th:each="group : ${listGroups}" th:value="${group.groupId}" th:text="${group.groupNum}"></option>
+        </select>
+        <input type="submit" value="Create student"/>
+    </form>
+
+    <h2> Group List </h2>
+
+    <div class="group-list">
+        <table>
+            <tr th:each="group: ${listGroups}">
+                <td th:text="${group.groupId}" />
+                <td th:text="${group.groupNum}" />
+                <td th:text="${group.groupDescription}" />
+            </tr>
+        </table>
+    </div>
+
+    <h2> Student List </h2>
+
+    <div class="student-list">
+        <table>
+            <tr th:each="userEntity: ${listUsers}">
+                <td th:text="${userEntity.id}" />
+                <td th:text="${userEntity.username}" />
+                <td th:text="${userEntity.password}" />
+            </tr>
+        </table>
+    </div>
+</div>
+
+<div th:if="${addGroupSuccess}">
+    <p><span th:text="${addGroupSuccess}"></span></p>
+    <a th:href="@{/admin-page}"> Go back to admin page </a>
+</div>
+<div th:if="${addUserSuccess}">
+    <p><span th:text="${addUserSuccess}"></span></p>
+    <p>Name : <span th:text="${username}"></span></p>
+    <p>Password : <span th:text="${password}"></span></p>
+    <p>Group : <span th:text="${group}"></span></p>
+
+    <a th:href="@{/admin-page}"> Go back to admin page </a>
+</div>
+
+
+<form th:action="@{/logout}" method="post">
+    <input type="submit" value="Sign Out"/>
+</form>
+</body>
+</html>
