@@ -7,7 +7,7 @@
 <body>
 <h3 th:inline="text">You have been logged as [[${#httpServletRequest.remoteUser}]]!</h3>
 
-<div th:if="not ${addGroupSuccess} or not ${addUserSuccess}">
+<div th:if="not ${addGroupSuccess} or not ${addUserSuccess} or not ${addTaskSuccess}">
     <form th:action="@{/new-group}" method="post">
         <input type="text" name="groupNumber" placeholder="groupNumber">
         <input type="text" name="shortDescription" placeholder="shortDescription">
@@ -23,7 +23,15 @@
         <input type="submit" value="Create student"/>
     </form>
 
-    <h2> Group List </h2>
+    <form th:action="@{/new-task}" method="post">
+        <input type="text" name="taskName" placeholder="taskName">
+        <textarea type="text" name="taskDescription" placeholder="taskDescription"></textarea>
+        <textarea name="taskInputValues" placeholder="taskInputValues"></textarea>
+        <textarea name="taskOutputValues" placeholder="taskOutputValues"> </textarea>
+        <input type="submit" value="Create task"/>
+    </form>
+
+    <h2> Groups List </h2>
 
     <div class="group-list">
         <table>
@@ -35,7 +43,7 @@
         </table>
     </div>
 
-    <h2> Student List </h2>
+    <h2> Students List </h2>
 
     <div class="student-list">
         <table>
@@ -46,12 +54,28 @@
             </tr>
         </table>
     </div>
+
+    <h2> Tasks List </h2>
+
+    <div class="student-list">
+        <table>
+            <tr th:each="task: ${listTasks}">
+                <td th:text="${task.taskId}" />
+                <td th:text="${task.name}" />
+                <td th:text="${task.description}" />
+                <td th:text="${task.input}" />
+                <td th:text="${task.output}" />
+            </tr>
+        </table>
+    </div>
+
 </div>
 
 <div th:if="${addGroupSuccess}">
     <p><span th:text="${addGroupSuccess}"></span></p>
     <a th:href="@{/admin-page}"> Go back to admin page </a>
 </div>
+
 <div th:if="${addUserSuccess}">
     <p><span th:text="${addUserSuccess}"></span></p>
     <p>Name : <span th:text="${username}"></span></p>
@@ -60,7 +84,10 @@
 
     <a th:href="@{/admin-page}"> Go back to admin page </a>
 </div>
-
+<div th:if="${addTaskSuccess}">
+    <p><span th:text="${addTaskSuccess}"></span></p>
+    <a th:href="@{/admin-page}"> Go back to admin page </a>
+</div>
 
 <form th:action="@{/logout}" method="post">
     <input type="submit" value="Sign Out"/>
