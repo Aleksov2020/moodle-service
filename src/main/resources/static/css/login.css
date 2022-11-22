@@ -1,6 +1,15 @@
 .login-form {
+    padding: 20px;
     width: 400px;
     margin: auto;
     background-color: aliceblue;
     border: 1px black solid;
+}
+
+.btn {
+    margin-top: 20px;
+}
+
+.error-message {
+    color: red;
 }
