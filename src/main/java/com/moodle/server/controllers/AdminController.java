@@ -23,6 +23,7 @@ public class AdminController {
     @GetMapping("/admin-page")
     public String homePage(Map<String, Object> model) {
         model.put("listGroups", groupService.findAll());
+        //TODO only users
         model.put("listUsers", userService.findAll());
         return "admin";
     }
