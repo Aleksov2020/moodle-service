@@ -5,7 +5,6 @@ import com.moodle.server.models.Role;
 import com.moodle.server.models.UserEntity;
 import com.moodle.server.repository.RoleRepository;
 import com.moodle.server.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
