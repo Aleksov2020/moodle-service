@@ -31,26 +31,31 @@
 </nav>
 
 <div class="container">
-    <div class="row"> <p class="fs-4"> Group number : <span th:text="${group.groupNum}"/>  </p> </div>
+    <h2 th:text="${task.name}"/>
+    <p th:text="${task.description}">
+    <p th:text="${task.input}" />
+    <p th:text="${task.output}" />
 
-    <p class="fs-3">Students in this group</p>
-    <table class="table">
-        <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Username</th>
-            <th scope="col">Password</th>
-        </tr>
-        </thead>
-        <tbody class="table-group-divider">
-        <tr th:each="student: ${listStudents}">
-            <th scope="row" th:text="${student.id}" />
-            <td th:text="${student.username}" />
-            <td th:text="${student.password}" />
-        </tr>
-        </tbody>
-    </table>
-    <a th:href="@{/download-group-list(groupId=${group.groupId})}"> Download group information </a>
+    <div class="row">
+        <div class="col-6">
+            <p class="fs-4">Send task to group</p>
+            <div class="form">
+                <form th:action="@{/send-task-to-group}" method="post" class="row gy-2 gx-3 align-items-center">
+                    <select class="form-select" id="autoSizingSelect" name="groupId">
+                        <option th:each="group : ${listGroups}" th:value="${group.groupId}" th:text="${group.groupNum}"></option>
+                    </select>
+                    <input type="submit" value="Send to Group"/>
+                </form>
+            </div>
+            <p class="fs-4">Send task to user</p>
+            <div class="form">
+                <form th:action="@{/generate-massive}" method="post" class="row gy-2 gx-3 align-items-center">
+                    <input type="number" name="countOfElements" placeholder="Count of elements">
+                    <input type="submit" value="Generate massive"/>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 </html>

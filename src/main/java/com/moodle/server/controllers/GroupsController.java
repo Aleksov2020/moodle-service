@@ -4,9 +4,6 @@ import com.moodle.server.models.Group;
 import com.moodle.server.services.DownloadService;
 import com.moodle.server.services.GroupService;
 import com.moodle.server.services.UserService;
-import org.apache.tomcat.util.http.fileupload.FileUtils;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.ServletContext;
-import java.io.*;
-import java.nio.file.Files;
+import java.io.IOException;
 import java.util.Map;
 
 @Controller
