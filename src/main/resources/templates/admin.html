@@ -18,7 +18,7 @@
         <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Groups</a>
+                    <a class="nav-link active" aria-current="page" th:href="@{/groups}">Groups</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Students</a>
@@ -86,18 +86,6 @@
             <input type="submit" value="Create task"/>
         </form>
 
-        <h2> Groups List </h2>
-
-        <div class="group-list">
-            <table>
-                <tr th:each="group: ${listGroups}">
-                    <td th:text="${group.groupId}" />
-                    <td th:text="${group.groupNum}" />
-                    <td th:text="${group.groupDescription}" />
-                </tr>
-            </table>
-        </div>
-
         <h2> Students List </h2>
 
         <div class="student-list">
@@ -112,7 +100,7 @@
 
         <h2> Tasks List </h2>
 
-        <div class="student-list">
+        <div class="task-list">
             <table>
                 <tr th:each="task: ${listTasks}">
                     <td th:text="${task.taskId}" />

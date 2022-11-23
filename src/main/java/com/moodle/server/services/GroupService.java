@@ -10,4 +10,6 @@ public interface GroupService {
     List<Group> findAll();
 
     Group findById(Long id);
+
+    boolean deleteGroupById(Long id);
 }

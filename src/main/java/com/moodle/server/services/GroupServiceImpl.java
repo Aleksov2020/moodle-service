@@ -30,4 +30,14 @@ public class GroupServiceImpl implements GroupService {
                 () -> new NotFoundException("Group not found")
         );
     }
+
+    @Override
+    public boolean deleteGroupById(Long id) {
+        if (groupRepository.findById(id).isPresent()) {
+            groupRepository.deleteById(id);
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
