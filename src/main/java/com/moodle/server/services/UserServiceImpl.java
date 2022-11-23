@@ -5,7 +5,7 @@ import com.moodle.server.models.Role;
 import com.moodle.server.models.UserEntity;
 import com.moodle.server.repository.RoleRepository;
 import com.moodle.server.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.commons.text.RandomStringGenerator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -16,6 +16,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -43,6 +45,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    @Transactional
+    public void deleteUsersByGroupId(Long groupId) {
+        userRepository.deleteUserEntitiesByGroup_GroupId(groupId);
+    }
+
+    @Override
     public boolean registerNewUser(String firstName, String lastName, String middleName, Group group, String username, String password) {
         if (userRepository.existsByUsername(username)) {
             return false;
@@ -62,6 +70,34 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         userRepository.save(user);
 
         return true;
+    }
+
+    @Override
+    public List<UserEntity> generateUsers(Integer count, Group group) {
+
+        List<UserEntity> userEntityList = new ArrayList<>();
+
+        for (int i = 0; i < count; i++) {
+            UserEntity user = new UserEntity();
+
+            user.setEnabled(true);
+            Role roles = roleRepository.findByName("USER");
+            user.setUsername(
+                    "user" + String.valueOf(userRepository.getNextValMySequence()
+                    + 1000 + (int)(Math.random() * 1000))
+            );
+            user.setPassword(passwordEncoder.encode((generateRandomSpecialCharacters(8))));
+            user.setRoles(Collections.singletonList(roles));
+            user.setGroup(group);
+
+            userEntityList.add(userRepository.save(user));
+        }
+        return userEntityList;
+    }
+
+    @Override
+    public List<UserEntity> findByGroupId(Long groupId) {
+        return userRepository.findUserEntitiesByGroup_GroupId(groupId);
     }
 
     @Override
@@ -100,5 +136,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     private Collection<GrantedAuthority> mapRolesToAuthorities(List<Role> roles) {
         return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
+    }
+
+    public String generateRandomSpecialCharacters(int length) {
+        RandomStringGenerator pwdGenerator = new RandomStringGenerator.Builder().withinRange(33, 45)
+                .build();
+        return pwdGenerator.generate(length);
     }
 }

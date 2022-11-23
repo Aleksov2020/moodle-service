@@ -1,8 +1,10 @@
 package com.moodle.server.controllers;
 
 import com.moodle.server.models.Group;
+import com.moodle.server.models.Task;
 import com.moodle.server.models.UserEntity;
 import com.moodle.server.services.GroupService;
+import com.moodle.server.services.TaskService;
 import com.moodle.server.services.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,16 +17,22 @@ import java.util.Map;
 @Slf4j
 @Controller
 public class AdminController {
-    @Autowired
-    GroupService groupService;
-    @Autowired
-    UserService userService;
+    private final GroupService groupService;
+    private final UserService userService;
+    private final TaskService taskService;
+
+    public AdminController(GroupService groupService, UserService userService, TaskService taskService) {
+        this.groupService = groupService;
+        this.userService = userService;
+        this.taskService = taskService;
+    }
 
     @GetMapping("/admin-page")
     public String homePage(Map<String, Object> model) {
         model.put("listGroups", groupService.findAll());
         //TODO only users
         model.put("listUsers", userService.findAll());
+        model.put("listTasks", taskService.findAll());
         return "admin";
     }
 
@@ -36,13 +44,15 @@ public class AdminController {
                     shortDescription
                 )
         );
-        model.put("addGroupSuccess", "Create group was success");
+        model.put("addGroupSuccess", "Group was created successfully");
         return "admin";
     }
 
     @PostMapping("/new-user")
-    public String createNewUser(@RequestParam String username, @RequestParam String password, @RequestParam Long groupId, Map<String, Object> model) {
-        log.info(groupId.toString());
+    public String createNewUser(@RequestParam String username,
+                                @RequestParam String password,
+                                @RequestParam Long groupId,
+                                Map<String, Object> model) {
         userService.registerNewUser(
                 null,
                 null,
@@ -51,10 +61,28 @@ public class AdminController {
                 username,
                 password
         );
-        model.put("addUserSuccess", "Create user was success");
+        model.put("addUserSuccess", "User was created successfully");
         model.put("username", username);
         model.put("password", password);
         model.put("group", groupId);
+        return "admin";
+    }
+
+    @PostMapping("/new-task")
+    public String createNewTask(@RequestParam String taskName,
+                                @RequestParam String taskDescription,
+                                @RequestParam String taskInputValues,
+                                @RequestParam String taskOutputValues,
+                                Map<String, Object> model) {
+        taskService.saveTask(
+                new Task(
+                        taskName,
+                        taskDescription,
+                        taskInputValues,
+                        taskOutputValues
+                )
+        );
+        model.put("addTaskSuccess", "Task was created successfully");
         return "admin";
     }
 }

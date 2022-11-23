@@ -33,6 +33,7 @@ public class WebSecurityConfig {
                         .antMatchers("/admin-page").hasRole("ADMIN")
                         .antMatchers("/").authenticated()
                         .antMatchers("/css/**","/js/**").permitAll()
+                        .antMatchers("https://cdn.jsdelivr.net/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
