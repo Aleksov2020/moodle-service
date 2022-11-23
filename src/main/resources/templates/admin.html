@@ -18,13 +18,10 @@
         <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" th:href="@{/groups}">Groups</a>
+                    <a class="nav-link" th:href="@{/groups}">Groups</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Students</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Tasks</a>
+                    <a class="nav-link" th:href="@{/tasks}">Tasks</a>
                 </li>
             </ul>
             <span class="navbar-text">
@@ -77,15 +74,6 @@
                 </form>
             </div>
         </div>
-
-        <form th:action="@{/new-task}" method="post">
-            <input type="text" name="taskName" placeholder="taskName">
-            <textarea type="text" name="taskDescription" placeholder="taskDescription"></textarea>
-            <textarea name="taskInputValues" placeholder="taskInputValues"></textarea>
-            <textarea name="taskOutputValues" placeholder="taskOutputValues"> </textarea>
-            <input type="submit" value="Create task"/>
-        </form>
-
         <h2> Students List </h2>
 
         <div class="student-list">
@@ -97,21 +85,6 @@
                 </tr>
             </table>
         </div>
-
-        <h2> Tasks List </h2>
-
-        <div class="task-list">
-            <table>
-                <tr th:each="task: ${listTasks}">
-                    <td th:text="${task.taskId}" />
-                    <td th:text="${task.name}" />
-                    <td th:text="${task.description}" />
-                    <td th:text="${task.input}" />
-                    <td th:text="${task.output}" />
-                </tr>
-            </table>
-        </div>
-
     </div>
 
     <div th:if="${addGroupSuccess}">

@@ -32,7 +32,6 @@ public class AdminController {
         model.put("listGroups", groupService.findAll());
         //TODO only users
         model.put("listUsers", userService.findAll());
-        model.put("listTasks", taskService.findAll());
         return "admin";
     }
 
@@ -68,21 +67,5 @@ public class AdminController {
         return "admin";
     }
 
-    @PostMapping("/new-task")
-    public String createNewTask(@RequestParam String taskName,
-                                @RequestParam String taskDescription,
-                                @RequestParam String taskInputValues,
-                                @RequestParam String taskOutputValues,
-                                Map<String, Object> model) {
-        taskService.saveTask(
-                new Task(
-                        taskName,
-                        taskDescription,
-                        taskInputValues,
-                        taskOutputValues
-                )
-        );
-        model.put("addTaskSuccess", "Task was created successfully");
-        return "admin";
-    }
+
 }
