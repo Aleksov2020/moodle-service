@@ -1,7 +1,6 @@
 package com.moodle.server.controllers;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
-import com.moodle.server.models.Task;
 import com.moodle.server.models.TaskList;
 import com.moodle.server.services.TaskListService;
 import com.moodle.server.services.TaskService;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -31,11 +29,14 @@ public class StudentController {
         this.taskService = taskService;
     }
     @GetMapping("/profile")
-    public String homePage(Authentication authentication,
+    public String userProfile(Authentication authentication,
                            Map<String, Object> model) {
-        List<TaskList> passedTasksList = taskListService.findPassedTaskListByUserId(userService.findUserByName(authentication.getName()).getId());
-        List<TaskList> notPassedTasksList = taskListService.findWaitingTaskListByUserId(userService.findUserByName(authentication.getName()).getId());
-
+        List<TaskList> passedTasksList = taskListService.findPassedTaskListByUserId(
+                userService.findUserByName(authentication.getName()).getId()
+        );
+        List<TaskList> notPassedTasksList = taskListService.findWaitingTaskListByUserId(
+                userService.findUserByName(authentication.getName()).getId()
+        );
 
         model.put("user", userService.findUserByName(authentication.getName()));
         model.put("passedTasks", passedTasksList);
@@ -45,10 +46,14 @@ public class StudentController {
     }
 
     @GetMapping("/my-tasks")
-    public String userTasks(Authentication authentication,
+    public String allUserTasks(Authentication authentication,
                             Map<String, Object> model) {
-        List<TaskList> passedTasksList = taskListService.findPassedTaskListByUserId(userService.findUserByName(authentication.getName()).getId());
-        List<TaskList> notPassedTasksList = taskListService.findWaitingTaskListByUserId(userService.findUserByName(authentication.getName()).getId());
+        List<TaskList> passedTasksList = taskListService.findPassedTaskListByUserId(
+                userService.findUserByName(authentication.getName()).getId()
+        );
+        List<TaskList> notPassedTasksList = taskListService.findWaitingTaskListByUserId(
+                userService.findUserByName(authentication.getName()).getId()
+        );
 
         model.put("passedTasks", passedTasksList);
         model.put("notPassedTasks", notPassedTasksList);
@@ -57,7 +62,6 @@ public class StudentController {
 
     @GetMapping("/my-task")
     public String userTask(@RequestParam Long taskId,
-                           Authentication authentication,
                             Map<String, Object> model) {
         model.put("task", taskService.findById(taskId));
         return "profile-task";
@@ -71,6 +75,7 @@ public class StudentController {
                                   @RequestParam String lastName,
                                   @RequestParam String middleName,
                                   @RequestParam String email) {
+        // TODO check input values
         userService.updateUser(
                 userService.findUserByName(authentication.getName()),
                 password,
@@ -88,7 +93,7 @@ public class StudentController {
                               @RequestParam String input,
                               @RequestParam String language,
                               @RequestParam Long taskId,
-                              Map<String, Object> model) throws IOException, UnirestException {
+                              Map<String, Object> model) throws UnirestException {
         String result = taskService.checkAnswer(
                 answerCode,
                 input,
@@ -97,11 +102,12 @@ public class StudentController {
                 userService.findUserByName(authentication.getName())
         );
 
-        if ((result == "INCORRECT_ANSWER") || (result == "CODE_ERROR")) {
+        if ((result.equals("INCORRECT_ANSWER")) || (result.equals("CODE_ERROR"))) {
             model.put("resultStatus", result);
             model.put("task", taskService.findById(taskId));
             return "profile-task";
         }
+
         return "redirect:/profile-tasks";
     }
 

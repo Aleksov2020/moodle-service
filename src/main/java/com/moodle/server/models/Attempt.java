@@ -5,11 +5,10 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Data
-@Entity
 @NoArgsConstructor
+@Entity
 @Table(name="attempt")
 public class Attempt {
     @Id

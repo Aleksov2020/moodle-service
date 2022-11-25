@@ -21,16 +21,11 @@ public class TaskList {
     private Task task;
     @OneToOne
     private UserEntity userEntity;
-
     private String mark;
-
     @ColumnDefault("false")
     private Boolean isPassed;
-
     private LocalDateTime deadLine;
-
     private LocalDateTime wasAnswered;
-
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Attempt> attempts = new ArrayList<>();
 

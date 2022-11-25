@@ -11,10 +11,10 @@ public class DownloadServiceImpl implements DownloadService{
 
     @Override
     public InputStream downloadUsersFromGroupList(Long groupId, List<UserEntity> userEntityList) {
-        String resultString = "";
+        StringBuilder resultString = new StringBuilder();
         for(UserEntity student : userEntityList){
-            resultString += "Username : " + student.getUsername() + " Password : " + student.getDecodePassword() + "\n";
+            resultString.append("Username : ").append(student.getUsername()).append(" Password : ").append(student.getDecodePassword()).append("\n");
         }
-        return new ByteArrayInputStream(resultString.getBytes());
+        return new ByteArrayInputStream(resultString.toString().getBytes());
     }
 }

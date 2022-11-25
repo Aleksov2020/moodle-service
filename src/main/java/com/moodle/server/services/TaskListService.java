@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface TaskListService {
     void sendToGroupTask(Task task, Group groupId);
+
     List<TaskList> findPassedTaskListByUserId(Long userId);
 
     List<TaskList> findWaitingTaskListByUserId(Long userId);

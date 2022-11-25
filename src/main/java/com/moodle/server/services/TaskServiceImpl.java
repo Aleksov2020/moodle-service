@@ -1,6 +1,5 @@
 package com.moodle.server.services;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
@@ -12,14 +11,10 @@ import com.moodle.server.models.UserEntity;
 import com.moodle.server.repository.TaskListRepository;
 import com.moodle.server.repository.TaskRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.json.*;
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @Slf4j
@@ -51,20 +46,6 @@ public class TaskServiceImpl implements TaskService {
         return taskRepository.findById(id).orElseThrow(
                 () -> new NotFoundException("Task not found")
         );
-    }
-
-    @Override
-    public List<Task> findTasksByUserId(Long userId) {
-        return null;
-    }
-
-    @Override
-    public List<Integer> generateMassive(Integer countOfElements) {
-        ArrayList<Integer> integerArrayList = new ArrayList<>();
-        for (int i = 0; i < countOfElements; i++) {
-            integerArrayList.add((int) (Math.random() * 1000));
-        }
-        return integerArrayList;
     }
 
     @Override
@@ -125,29 +106,18 @@ public class TaskServiceImpl implements TaskService {
     }
 
     private String setMark(Integer countOfAttempts) {
-        switch(countOfAttempts) {
-            case 0:
-                return "5+";
-            case 1:
-                return "5";
-            case 2:
-                return "5-";
-            case 3:
-                return "4+";
-            case 4:
-                return "4";
-            case 5:
-                return "4-";
-            case 6:
-                return "3+";
-            case 7:
-                return "3";
-            case 8:
-                return "3-";
-            case 9:
-                return "2";
-            default:
-                return "0";
-        }
+        return switch (countOfAttempts) {
+            case 0 -> "5+";
+            case 1 -> "5";
+            case 2 -> "5-";
+            case 3 -> "4+";
+            case 4 -> "4";
+            case 5 -> "4-";
+            case 6 -> "3+";
+            case 7 -> "3";
+            case 8 -> "3-";
+            case 9 -> "2";
+            default -> "0";
+        };
     }
 }

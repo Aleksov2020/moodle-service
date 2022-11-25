@@ -11,5 +11,5 @@ public interface GroupService {
 
     Group findById(Long id);
 
-    boolean deleteGroupById(Long id);
+    void deleteGroupById(Long id);
 }
