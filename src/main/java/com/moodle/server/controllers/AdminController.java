@@ -1,38 +1,22 @@
 package com.moodle.server.controllers;
 
 import com.moodle.server.models.Group;
-import com.moodle.server.models.Task;
-import com.moodle.server.models.UserEntity;
 import com.moodle.server.services.GroupService;
-import com.moodle.server.services.TaskService;
 import com.moodle.server.services.UserService;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Map;
-@Slf4j
+
 @Controller
 public class AdminController {
     private final GroupService groupService;
     private final UserService userService;
-    private final TaskService taskService;
 
-    public AdminController(GroupService groupService, UserService userService, TaskService taskService) {
+    public AdminController(GroupService groupService, UserService userService) {
         this.groupService = groupService;
         this.userService = userService;
-        this.taskService = taskService;
-    }
-
-    @GetMapping("/admin-page")
-    public String homePage(Map<String, Object> model) {
-        model.put("listGroups", groupService.findAll());
-        //TODO only users
-        model.put("listUsers", userService.findAll());
-        return "admin";
     }
 
     @PostMapping("/new-group")
@@ -44,7 +28,7 @@ public class AdminController {
                 )
         );
         model.put("addGroupSuccess", "Group was created successfully");
-        return "admin";
+        return "redirect:/admin";
     }
 
     @PostMapping("/new-user")
@@ -64,7 +48,7 @@ public class AdminController {
         model.put("username", username);
         model.put("password", password);
         model.put("group", groupId);
-        return "admin";
+        return "redirect:/admin";
     }
 
 

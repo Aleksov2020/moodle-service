@@ -1,11 +1,11 @@
 package com.moodle.server.services;
+
 import com.moodle.server.models.Group;
 import com.moodle.server.models.UserEntity;
 
 import java.util.List;
 
 public interface UserService {
-    UserEntity findUserById(Long userId);
 
     void deleteUsersByGroupId(Long groupId);
 
@@ -22,9 +22,6 @@ public interface UserService {
 
     UserEntity findUserByName(String username);
 
-    List<UserEntity> findAll();
+    UserEntity updateUser(UserEntity user, String password, String firstName, String lastName, String middleName, String email);
 
-    UserEntity saveUser(UserEntity userEntity);
-
-    boolean deleteUser(Long userId);
 }

@@ -6,7 +6,6 @@ import com.moodle.server.models.UserEntity;
 import com.moodle.server.repository.RoleRepository;
 import com.moodle.server.repository.UserRepository;
 import org.apache.commons.text.RandomStringGenerator;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -29,19 +28,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
 
-    @Value("${moodle.secretKey}")
-    private String secretCode;
-
     public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
-    }
-
-
-    @Override
-    public UserEntity findUserById(Long usrId) {
-        return userRepository.findById(usrId).orElse(new UserEntity());
     }
 
     @Override
@@ -81,12 +71,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             UserEntity user = new UserEntity();
 
             user.setEnabled(true);
-            Role roles = roleRepository.findByName("USER");
+            Role roles = roleRepository.findByName("ROLE_USER");
+            //TODO check unique
             user.setUsername(
-                    "user" + String.valueOf(userRepository.getNextValMySequence()
-                    + 1000 + (int)(Math.random() * 1000))
+                    "user" + (1000 + (int) (Math.random() * 10000))
             );
-            user.setPassword(passwordEncoder.encode((generateRandomSpecialCharacters(8))));
+            String password = generateRandomSpecialCharacters(8);
+            user.setPassword(passwordEncoder.encode((password)));
+            user.setDecodePassword(password);
+            user.setPasswordChanged(false);
             user.setRoles(Collections.singletonList(roles));
             user.setGroup(group);
 
@@ -108,22 +101,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public List<UserEntity> findAll() {
-        return userRepository.findAll();
-    }
-
-    @Override
-    public UserEntity saveUser(UserEntity userEntity) {
-        return userRepository.save(userEntity);
-    }
-
-    @Override
-    public boolean deleteUser(Long userId) {
-        if (userRepository.findById(userId).isPresent()){
-            userRepository.deleteById(userId);
-            return true;
-        }
-        return false;
+    public UserEntity updateUser(UserEntity user, String password, String firstName, String lastName, String middleName, String email) {
+        user.setPasswordChanged(true);
+        user.setPassword(passwordEncoder.encode((password)));
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setMiddleName(middleName);
+        user.setEmail(email);
+        return userRepository.save(user);
     }
 
     @Override

@@ -2,8 +2,8 @@ package com.moodle.server.controllers;
 
 import com.moodle.server.models.Task;
 import com.moodle.server.services.GroupService;
+import com.moodle.server.services.TaskListService;
 import com.moodle.server.services.TaskService;
-import com.moodle.server.services.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,43 +16,38 @@ import java.util.Map;
 @Slf4j
 public class TaskController {
     private final TaskService taskService;
-
-    private final UserService userService;
-
     private final GroupService groupService;
+    private final TaskListService taskListService;
 
     public TaskController(TaskService taskService,
-                          UserService userService,
-                          GroupService groupService) {
+                          GroupService groupService,
+                          TaskListService taskListService) {
         this.taskService = taskService;
         this.groupService = groupService;
-        this.userService = userService;
+        this.taskListService = taskListService;
     }
 
     @GetMapping("/tasks")
-    public String homePage(Map<String, Object> model) {
+    public String allTasks(Map<String, Object> model) {
         model.put("listTasks", taskService.findAll());
         return "tasks";
     }
 
     @GetMapping("/task")
-    public String homePage(@RequestParam Long taskId,
+    public String singleTask(@RequestParam Long taskId,
                            Map<String, Object> model) {
         model.put("task", taskService.findById(taskId));
         model.put("listGroups", groupService.findAll());
         return "task";
     }
 
-    @PostMapping("/generate-massive")
-    public String generateMassive(@RequestParam Integer countOfElements,
-                                  Map<String, Object> model) {
-        model.put("generatedMassive", String.valueOf(taskService.generateMassive(countOfElements)));
-        return "tasks";
-    }
-
     @PostMapping("/send-task-to-group")
-    public String sendTaskToTheGroup(@RequestParam Long groupId) {
-        log.info("Send tasks to group : " + groupId.toString());
+    public String sendTaskToTheGroup(@RequestParam Long groupId,
+                                     @RequestParam Long taskId) {
+        taskListService.sendToGroupTask(
+                taskService.findById(taskId),
+                groupService.findById(groupId)
+        );
         return "redirect:/tasks";
     }
 
@@ -60,8 +55,7 @@ public class TaskController {
     public String createNewTask(@RequestParam String taskName,
                                 @RequestParam String taskDescription,
                                 @RequestParam String taskInputValues,
-                                @RequestParam String taskOutputValues,
-                                Map<String, Object> model) {
+                                @RequestParam String taskOutputValues) {
         taskService.saveTask(
                 new Task(
                         taskName,
@@ -70,8 +64,8 @@ public class TaskController {
                         taskOutputValues
                 )
         );
-        //TODO redirect to certain task
-        return "redirect:/task";
+        //TODO redirect to certain task maybe
+        return "redirect:/tasks";
     }
 
 }
