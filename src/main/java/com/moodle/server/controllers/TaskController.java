@@ -2,6 +2,7 @@ package com.moodle.server.controllers;
 
 import com.moodle.server.models.Task;
 import com.moodle.server.services.GroupService;
+import com.moodle.server.services.TaskListService;
 import com.moodle.server.services.TaskService;
 import com.moodle.server.services.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -16,17 +17,18 @@ import java.util.Map;
 @Slf4j
 public class TaskController {
     private final TaskService taskService;
-
     private final UserService userService;
-
     private final GroupService groupService;
+    private final TaskListService taskListService;
 
     public TaskController(TaskService taskService,
                           UserService userService,
-                          GroupService groupService) {
+                          GroupService groupService,
+                          TaskListService taskListService) {
         this.taskService = taskService;
         this.groupService = groupService;
         this.userService = userService;
+        this.taskListService = taskListService;
     }
 
     @GetMapping("/tasks")
@@ -51,8 +53,13 @@ public class TaskController {
     }
 
     @PostMapping("/send-task-to-group")
-    public String sendTaskToTheGroup(@RequestParam Long groupId) {
+    public String sendTaskToTheGroup(@RequestParam Long groupId,
+                                     @RequestParam Long taskId) {
         log.info("Send tasks to group : " + groupId.toString());
+        taskListService.sendToGroupTask(
+                taskService.findById(taskId),
+                groupService.findById(groupId)
+        );
         return "redirect:/tasks";
     }
 
@@ -71,7 +78,7 @@ public class TaskController {
                 )
         );
         //TODO redirect to certain task
-        return "redirect:/task";
+        return "redirect:/tasks";
     }
 
 }

@@ -44,7 +44,7 @@ public class AdminController {
                 )
         );
         model.put("addGroupSuccess", "Group was created successfully");
-        return "admin";
+        return "redirect:/admin";
     }
 
     @PostMapping("/new-user")
@@ -64,7 +64,7 @@ public class AdminController {
         model.put("username", username);
         model.put("password", password);
         model.put("group", groupId);
-        return "admin";
+        return "redirect:/admin";
     }
 
 

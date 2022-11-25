@@ -31,7 +31,7 @@ public class WebSecurityConfig {
         http
                 .authorizeHttpRequests((requests) -> requests
                         .antMatchers("/admin-page").hasRole("ADMIN")
-                        .antMatchers("/").authenticated()
+                        .antMatchers("/").hasAnyRole("ADMIN", "USER")
                         .antMatchers("/css/**","/js/**").permitAll()
                         .antMatchers("https://cdn.jsdelivr.net/**").permitAll()
                         .anyRequest().authenticated()

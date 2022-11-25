@@ -1,67 +1,86 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <title>Manage groups</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-<!-- Navigation -->
-<nav class="navbar navbar-expand-lg bg-light">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">Moodle Service</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarText">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/groups}">Groups</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" th:href="@{/tasks}">Tasks</a>
-                </li>
-            </ul>
-            <span class="navbar-text">
-                <p th:inline="text">You have been logged as [[${#httpServletRequest.remoteUser}]]!</p>
-            </span>
-        </div>
-    </div>
-</nav>
+<div th:insert="~{header :: nav}"></div>
 
-<div class="container">
-    <p class="fs-2">Quick actions</p>
-    <div class="row">
-        <!-- Create task -->
-        <div class="col-4 justify-content-center">
-            <p class="fs-4">Create task</p>
-            <div class="form">
-                <form th:action="@{/create-task}" method="post" class="row gy-2 gx-3 align-items-center">
-                    <input type="text" name="taskName" placeholder="taskName">
-                    <textarea type="text" name="taskDescription" placeholder="taskDescription"></textarea>
-                    <textarea name="taskInputValues" placeholder="taskInputValues"></textarea>
-                    <textarea name="taskOutputValues" placeholder="taskOutputValues"> </textarea>
-                    <input type="submit" value="Create task"/>
+<section style="background-color: #eee;">
+    <div class="container py-3">
+        <div class="row justify-content-around">
+            <!-- Create task -->
+            <div class="col-4 justify-content-center bg-white card mb-4 mt-4 p-4">
+                <p class="fs-4">Create task</p>
+                <form th:action="@{/create-task}" method="post" class="form">
+                    <div class="mb-3">
+                        <label for="taskName" class="form-label">Task name</label>
+                        <input type="text" name="taskName" class="form-control" id="taskName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="taskDescription" class="form-label">Task description</label>
+                        <textarea type="text" name="taskDescription" class="form-control" id="taskDescription"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="taskDescription" for="taskInputValues">Input Values</label>
+                        <textarea name="taskInputValues" type="text" class="form-control" id="taskInputValues"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="taskDescription" for="taskOutputValues">Output Values</label>
+                        <textarea name="taskOutputValues" type="text" class="form-control" id="taskOutputValues"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create task</button>
                 </form>
             </div>
-        </div>
 
-        <!-- Task helper -->
-        <div class="col-4 justify-content-center">
-            <p class="fs-4">Task helper</p>
-            <div class="form">
-                <form th:action="@{/generate-massive}" method="post" class="row gy-2 gx-3 align-items-center">
-                    <input type="number" name="countOfElements" placeholder="Count of elements">
-                    <input type="submit" value="Generate massive"/>
-                </form>
+            <!-- Task helper -->
+            <div class="col-4 justify-content-center bg-white card mb-4 mt-4 p-4">
+                <p class="fs-4">Generator</p>
+                <div class="row py-3">
+                    <input type="number" name="taskName" class="form-control" placeholder="Count of elements">
+                </div>
+                <div class="row py-3">
+                    <div class="col-6">
+                        <button type="submit" class="btn btn-primary">Integer Massive</button>
+                    </div>
+                    <div class="col-6">
+                        <button type="submit" class="btn btn-primary">Integer</button>
+                    </div>
+                </div>
+                <div class="row py-3">
+                    <div class="col-6">
+                        <button type="submit" class="btn btn-primary">String Massive</button>
+                    </div>
+                    <div class="col-6">
+                        <button type="submit" class="btn btn-primary">String</button>
+                    </div>
+                </div>
+                <div class="row py-3">
+                    <div class="col-6">
+                        <button type="submit" class="btn btn-primary">Char Massive</button>
+                    </div>
+                    <div class="col-6">
+                        <button type="submit" class="btn btn-primary">Char</button>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${generatedMassive}" class="row">
+                <p th:text="${generatedMassive}"/>
             </div>
         </div>
-        <div th:if="${generatedMassive}" class="row">
-            <p th:text="${generatedMassive}"/>
+    </div>
+</section>
+<section style="background-color: #eee;">
+    <div class="container py-3">
+        <div class="row">
+            <p class="fs-4">Tasks List </p>
         </div>
     </div>
-    <p class="fs-3">Task List</p>
+</section>
+<div class="container py-3">
     <div class="group-list">
         <table class="table">
             <thead>
@@ -72,11 +91,11 @@
             </tr>
             </thead>
             <tbody class="table-group-divider">
-                <tr th:each="task: ${listTasks}">
-                    <th scope="row" th:text="${task.taskId}" />
-                    <td th:text="${task.name}" />
-                    <td> <a th:href="@{/task(taskId=${task.taskId})}" /> -> </td>
-                </tr>
+            <tr th:each="task: ${listTasks}">
+                <th scope="row" th:text="${task.taskId}" />
+                <td th:text="${task.name}" />
+                <td> <a th:href="@{/task(taskId=${task.taskId})}" /> -> </td>
+            </tr>
             </tbody>
         </table>
     </div>

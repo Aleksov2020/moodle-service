@@ -13,7 +13,7 @@ public class DownloadServiceImpl implements DownloadService{
     public InputStream downloadUsersFromGroupList(Long groupId, List<UserEntity> userEntityList) {
         String resultString = "";
         for(UserEntity student : userEntityList){
-            resultString += "Username : " + student.getUsername() + " Password : " + student.getPassword() + "\n";
+            resultString += "Username : " + student.getUsername() + " Password : " + student.getDecodePassword() + "\n";
         }
         return new ByteArrayInputStream(resultString.getBytes());
     }

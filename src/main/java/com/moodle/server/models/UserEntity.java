@@ -17,7 +17,10 @@ public class UserEntity {
     private Long id;
     private String username;
     private String password;
+    private String decodePassword;
+    private boolean isPasswordChanged;
     private String firstName;
+    private String email;
     private String lastName;
     private String middleName;
 

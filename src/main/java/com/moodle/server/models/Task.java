@@ -13,10 +13,12 @@ public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long taskId;
-
     private String name;
+    @Column(length = 20000)
     private String description;
+    @Column(length = 20000)
     private String input;
+    @Column(length = 20000)
     private String output;
 
     public Task(String name, String description, String input, String output) {

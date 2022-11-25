@@ -24,6 +24,8 @@ public interface UserService {
 
     List<UserEntity> findAll();
 
+    UserEntity updateUser(UserEntity user, String password, String firstName, String lastName, String middleName, String email);
+
     UserEntity saveUser(UserEntity userEntity);
 
     boolean deleteUser(Long userId);
