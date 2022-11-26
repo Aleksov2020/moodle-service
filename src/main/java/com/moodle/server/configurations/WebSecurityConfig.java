@@ -22,7 +22,7 @@ public class WebSecurityConfig {
         // TODO set RequestMapping
         http
                 .authorizeHttpRequests((requests) -> requests
-                        .antMatchers("/admin-page").hasRole("ADMIN")
+                        .antMatchers("/admin/**").hasRole("ADMIN")
                         .antMatchers("/").hasAnyRole("ADMIN", "USER")
                         .antMatchers("/css/**","/js/**").permitAll()
                         .antMatchers("https://cdn.jsdelivr.net/**").permitAll()

@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5" lang="en-ru">
 <body>
-<div th:fragment="nav">
+<header th:fragment="nav">
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg bg-light">
         <div class="container-fluid">
@@ -9,40 +9,24 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div sec:authorize="hasRole('ADMIN')" class="collapse navbar-collapse">
+            <div class="collapse navbar-collapse">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/groups}">Groups</a>
+                    <li sec:authorize="hasRole('ADMIN')" class="nav-item">
+                        <a class="nav-link" th:href="@{/admin/groups}">Groups</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/tasks}">Tasks</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/admin-page}">Admin page</a>
+                    <li sec:authorize="hasRole('USER')" class="nav-item">
+                        <a class="nav-link"  th:href="@{/marks}">Marks</a>
                     </li>
                 </ul>
                 <span class="navbar-text">
-                <a th:href="@{/profile}"> [[${#httpServletRequest.remoteUser}]] </a>
-            </span>
-            </div>
-            <div sec:authorize="hasRole('USER')" class="collapse navbar-collapse">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/my-tasks}">My Tasks</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/theory}">Theory</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/marks}">Marks</a>
-                    </li>
-                </ul>
-                <span class="navbar-text">
-                    <a th:href="@{/profile}"> [[${#httpServletRequest.remoteUser}]]! </a>
+                    <a sec:authorize="hasRole('USER')" th:href="@{/profile}"> [[${#httpServletRequest.remoteUser}]] </a>
                 </span>
             </div>
         </div>
     </nav>
-</div>
+</header>
 </body>
 </html>

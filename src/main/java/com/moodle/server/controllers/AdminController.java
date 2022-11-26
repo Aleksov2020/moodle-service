@@ -5,11 +5,13 @@ import com.moodle.server.services.GroupService;
 import com.moodle.server.services.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Map;
 
 @Controller
+@RequestMapping("/admin/")
 public class AdminController {
     private final GroupService groupService;
     private final UserService userService;
@@ -19,7 +21,7 @@ public class AdminController {
         this.userService = userService;
     }
 
-    @PostMapping("/new-group")
+    @PostMapping("new-group")
     public String createNewGroup(@RequestParam String groupNumber, @RequestParam String shortDescription, Map<String, Object> model) {
         groupService.saveGroup(
                 new Group(
@@ -28,10 +30,10 @@ public class AdminController {
                 )
         );
         model.put("addGroupSuccess", "Group was created successfully");
-        return "redirect:/admin";
+        return "redirect:/";
     }
 
-    @PostMapping("/new-user")
+    @PostMapping("new-user")
     public String createNewUser(@RequestParam String username,
                                 @RequestParam String password,
                                 @RequestParam Long groupId,
@@ -48,7 +50,7 @@ public class AdminController {
         model.put("username", username);
         model.put("password", password);
         model.put("group", groupId);
-        return "redirect:/admin";
+        return "redirect:/";
     }
 
 

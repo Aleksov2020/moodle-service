@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5" lang="en-ru">
 <head>
     <title>Admin Page</title>
-    <link href="../static/css/admin.css" th:href="@{/css/admin.css}" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
@@ -11,18 +10,56 @@
 <!-- Navigation -->
 <div th:insert="~{header :: nav}"></div>
 
-<div class="row">
+<div sec:authorize="hasRole('ADMIN')" style="background-color: #eee;">
     <div class="container">
-        <div class="toast-container position-fixed bottom-0 end-0 p-3">
-            <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="toast-header">
-                    <strong class="me-auto">Admin</strong>
-                    <small>Just now</small>
-                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                </div>
-                <div class="toast-body">
-                    Hello, [[${#httpServletRequest.remoteUser}]]! Please change your password in your<a th:href="@{/profile(name=${#httpServletRequest.remoteUser})}"> profile</a>.
-                </div>
+        <div class="row justify-content-around">
+            <div class="col-4 justify-content-center bg-white card mb-4 mt-4 p-4">
+                <p class="fs-4 mx-auto">Create group</p>
+                <form th:action="@{/admin/new-group}" method="post" class="row mx-auto gy-2 gx-3 align-items-center">
+                    <div class="col-auto">
+                        <label class="form-label" for="groupNumber">Group Number</label>
+                        <input type="text" class="form-control" id="groupNumber" name="groupNumber">
+
+                        <label class="form-label" for="shortDescription">Short description</label>
+                        <input type="text" name="shortDescription" class="form-control" id="shortDescription">
+
+                        <button type="submit" class="btn btn-primary mt-3">Create group</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-4 justify-content-center bg-white card mb-4 mt-4 p-4">
+                <p class="fs-4 mx-auto">Create student</p>
+                <form th:action="@{/admin/new-user}" method="post" class="row mx-auto gy-2 gx-3 align-items-center">
+                    <div class="col-auto">
+                        <label class="form-label" for="username">User Name</label>
+                        <input type="text" class="form-control" id="username" name="username">
+
+                        <label class="form-label" for="password">Password</label>
+                        <input type="text" name="password" class="form-control" id="password">
+
+                        <label class="form-label" for="groupId">Select group</label>
+                        <select class="form-select" id="groupId" name="groupId">
+                            <option th:each="group : ${listGroups}" th:value="${group.groupId}" th:text="${group.groupNum}"></option>
+                        </select>
+
+                        <button type="submit" class="btn btn-primary mt-3">Create student</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto">Admin</strong>
+                <small>Just now</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                Hello, [[${#httpServletRequest.remoteUser}]]! Please change your password in your <a th:href="@{/profile}">profile</a>.
             </div>
         </div>
     </div>
