@@ -1,27 +1,27 @@
 package com.moodle.server.controllers;
 
-import com.moodle.server.services.UserService;
-import org.springframework.security.core.Authentication;
+import com.moodle.server.services.GroupService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
+
 @Controller
 public class MainController {
+    private final GroupService groupService;
 
-    private final UserService userService;
-
-    public MainController(UserService userService) {
-        this.userService = userService;
+    public MainController(GroupService groupService) {
+        this.groupService = groupService;
     }
 
     @GetMapping("/")
-    public String homePage(Authentication authentication) {
-        // TODO admin and home same templates -> join
-        // Rewrite
-        if (userService.findUserByName(authentication.getName()).getRoles().contains("ADMIN")) {
-             return "admin";
-        } else {
-            return "home";
+    public String homePage(HttpServletRequest httpServletRequest,
+                           Map<String, Object> model) {
+        if (httpServletRequest.isUserInRole("ADMIN")) {
+            model.put("listGroups", groupService.findAll());
         }
+
+        return "home";
     }
 }

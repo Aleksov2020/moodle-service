@@ -1,100 +1,109 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="en-ru">
 <head>
     <title>Manage groups</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-<div th:insert="~{header :: nav}"></div>
-<section style="background-color: #eee;">
-    <div class="container">
-        <div class="row justify-content-around">
+    <div th:insert="~{header :: nav}"></div>
 
-            <!-- Create group -->
-            <div class="col-3 justify-content-center bg-white card mb-4 mt-4 p-4">
-                <p class="fs-4 mx-auto">Create group</p>
-                <div class="form mx-auto">
-                    <form th:action="@{/create-group}" method="post" class="row gy-2 gx-3 align-items-center">
-                        <div class="col-auto mx-auto">
-                            <label class="form-label mt-3" for="groupNumber">Group Number</label>
-                            <input type="text" class="form-control" id="groupNumber" name="groupNumber">
+    <!-- Actions with group -->
+    <div style="background-color: #eee;">
+        <div class="container">
+            <div class="row justify-content-around">
 
-                            <label class="form-label mt-3" for="shortDescription">Short description</label>
-                            <input type="text" name="shortDescription" class="form-control" id="shortDescription">
+                <!-- Create group -->
+                <div class="col-3 justify-content-center bg-white card mb-4 mt-4 p-4">
+                    <p class="fs-4 mx-auto">Create group</p>
+                    <div class="form mx-auto">
+                        <form th:action="@{/admin/create-group}" method="post" class="row gy-2 gx-3 align-items-center">
+                            <div class="col-auto mx-auto">
+                                <label class="form-label mt-3" for="groupNumber">Group Number</label>
+                                <input type="text" class="form-control" id="groupNumber" name="groupNumber">
 
-                            <div class="col-auto mt-3 mx-auto">
-                                <button type="submit" class="btn btn-primary">Create group</button>
+                                <label class="form-label mt-3" for="shortDescription">Short description</label>
+                                <input type="text" name="shortDescription" class="form-control" id="shortDescription">
+
+                                <div class="col-auto mt-3 mx-auto">
+                                    <button type="submit" class="btn btn-primary">Create group</button>
+                                </div>
                             </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Auto generate group -->
-            <div class="col-4 justify-content-center bg-white card mb-4 mt-4 p-4 ">
-                <p class="fs-4 mx-auto">Generate group with students</p>
-                <div class="form mx-auto">
-                    <form th:action="@{/new-auto-group}" method="post" class="row gy-2 gx-3 align-items-center">
-                        <div class="col-auto mx-auto">
-                            <label class="form-label mt-3" for="groupNumber-2">Group Number</label>
-                            <input type="text" class="form-control" id="groupNumber-2" name="groupNumber">
+                <!-- Generate group with students -->
+                <div class="col-4 justify-content-center bg-white card mb-4 mt-4 p-4 ">
+                    <p class="fs-4 mx-auto">Generate group with students</p>
+                    <div class="form mx-auto">
+                        <form th:action="@{/admin/new-auto-group}" method="post" class="row gy-2 gx-3 align-items-center">
+                            <div class="col-auto mx-auto">
+                                <label class="form-label mt-3" for="groupNumber-2">Group Number</label>
+                                <input type="text" class="form-control" id="groupNumber-2" name="groupNumber">
 
-                            <label class="form-label mt-3" for="shortDescription-2">Short description</label>
-                            <input type="text" name="shortDescription" class="form-control" id="shortDescription-2">
+                                <label class="form-label mt-3" for="shortDescription-2">Short description</label>
+                                <input type="text" name="shortDescription" class="form-control" id="shortDescription-2">
 
-                            <label class="form-label mt-3" for="studentsCount">Count of students</label>
-                            <input type="number" name="studentsCount" class="form-control" id="studentsCount">
+                                <label class="form-label mt-3" for="studentsCount">Count of students</label>
+                                <input type="number" name="studentsCount" class="form-control" id="studentsCount">
 
-                            <button type="submit" class="btn btn-primary mt-4">Create group</button>
-                        </div>
-                    </form>
+                                <button type="submit" class="btn btn-primary mt-4">Create group</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Delete group -->
-            <div class="col-3 justify-content-center bg-white card mb-4 mt-4 p-4">
-                <p class="fs-4 mx-auto">Delete group</p>
-                <div class="form">
-                    <form th:action="@{/delete-group}" method="post" class="row gy-2 gx-3 align-items-center">
-                        <div class="col-auto mx-auto">
-                            <label class="form-label" for="autoSizingSelect">Select group</label>
-                            <select class="form-select" id="autoSizingSelect" name="groupId">
-                                <option th:each="group : ${listGroups}" th:value="${group.groupId}" th:text="${group.groupNum}"></option>
-                            </select>
+                <!-- Delete group -->
+                <div class="col-3 justify-content-center bg-white card mb-4 mt-4 p-4">
+                    <p class="fs-4 mx-auto">Delete group</p>
+                    <div class="form mx-auto">
+                        <form th:action="@{/admin/delete-group}" method="post" class="row gy-2 gx-3 align-items-center">
+                            <div class="col-auto mx-auto">
+                                <label class="form-label" for="autoSizingSelect">Select group</label>
+                                <select class="form-select" id="autoSizingSelect" name="groupId">
+                                    <option th:each="group : ${listGroups}" th:value="${group.groupId}" th:text="${group.groupNum}"></option>
+                                </select>
 
-                            <button type="submit" class="btn btn-primary mx-auto mt-4">Delete group</button>
-                        </div>
-                    </form>
+                                <button type="submit" class="btn btn-primary mx-auto mt-4">Delete group</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-</section>
-<div class="container">
-    <p class="fs-3 pt-4">Group List</p>
-    <div class="group-list">
-        <table class="table">
-            <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Group Num</th>
-                <th scope="col">Group Description</th>
-                <th scope="col">Go to the group</th>
-            </tr>
-            </thead>
-            <tbody class="table-group-divider">
-            <tr th:each="group: ${listGroups}">
-                <th scope="row" th:text="${group.groupId}" />
-                <td th:text="${group.groupNum}" />
-                <td th:text="${group.groupDescription}" />
-                <td> <a th:href="@{/group(groupId=${group.groupId})}" /> -> </td>
-            </tr>
-            </tbody>
-        </table>
+    <!-- Group list -->
+    <div class="container">
+        <div class="row">
+            <div class="col-auto">
+                <p class="fs-3 pt-4">Group List</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Group Num</th>
+                            <th scope="col">Group Description</th>
+                            <th scope="col">Go to the group</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                        <tr th:each="group: ${listGroups}">
+                            <th scope="row" th:text="${group.groupId}" />
+                            <td th:text="${group.groupNum}" />
+                            <td th:text="${group.groupDescription}" />
+                            <td> <a th:href="@{/admin/group(groupId=${group.groupId})}"> -> </a> </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-</div>
 </body>
 </html>

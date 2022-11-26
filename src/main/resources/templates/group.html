@@ -1,51 +1,66 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="en-ru">
 <head>
     <title>Group [[${group.groupNum}]] Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
 <div th:insert="~{header :: nav}"></div>
 
-<section style="background-color: #eee;">
+<div style="background-color: #eee;">
     <div class="container py-4">
         <div class="row">
-            <p class="fs-3"> Group number : <span th:text="${group.groupNum}"/>  </p>
+            <p class="fs-3">Group [[${group.groupNum}]]</p>
         </div>
     </div>
-</section>
+</div>
 
 <div class="container">
-    <p class="fs-4 pt-3">Students in this group</p>
-    <table class="table">
-        <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Username</th>
-            <th scope="col">First Name</th>
-            <th scope="col">Last Name</th>
-            <th scope="col">Middle Name</th>
-        </tr>
-        </thead>
-        <tbody class="table-group-divider">
-        <tr th:each="student: ${listStudents}">
-            <th scope="row" th:text="${student.id}" />
-            <td th:text="${student.username}" />
+    <div class="row">
+        <div class="col-auto">
+            <p class="fs-4 pt-3">Students in this group</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <!-- Students Table -->
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Username</th>
+                        <th scope="col">First Name</th>
+                        <th scope="col">Last Name</th>
+                        <th scope="col">Middle Name</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    <tr th:each="student: ${listStudents}">
+                        <th scope="row" th:text="${student.id}"/>
+                        <td th:text="${student.username}"/>
 
-            <td th:if="${student.firstName}" th:text="${student.firstName}" />
-            <td th:unless="${student.firstName}">Null</td>
+                        <td th:if="${student.firstName}" th:text="${student.firstName}"/>
+                        <td th:unless="${student.firstName}">Null</td>
 
-            <td th:if="${student.lastName}" th:text="${student.lastName}" />
-            <td th:unless="${student.lastName}">Null</td>
+                        <td th:if="${student.lastName}" th:text="${student.lastName}"/>
+                        <td th:unless="${student.lastName}">Null</td>
 
-            <td th:if="${student.middleName}" th:text="${student.middleName}" />
-            <td th:unless="${student.middleName}">Null</td>
-        </tr>
-        </tbody>
-    </table>
-    <a th:href="@{/download-group-list(groupId=${group.groupId})}"> Download group information </a>
+                        <td th:if="${student.middleName}" th:text="${student.middleName}"/>
+                        <td th:unless="${student.middleName}">Null</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row pb-5">
+        <div class="col-auto">
+            <a th:href="@{/admin/download-group-list(groupId=${group.groupId})}">
+                Download Group Information
+            </a>
+        </div>
+    </div>
 </div>
 </body>
 </html>

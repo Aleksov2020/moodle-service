@@ -91,17 +91,20 @@ public class TaskServiceImpl implements TaskService {
     }
 
     private JSONObject getCompileResult(String code, String input, String language) throws UnirestException {
-        if (input == null) {
-            input = "";
-        }
-
         Unirest.setTimeouts(0, 0);
+        log.info(code);
         HttpResponse<String> response = Unirest.post("https://codex-api.herokuapp.com")
                 .header("Content-Type", "application/x-www-form-urlencoded")
                 .field("code", code)
                 .field("language", language)
-                .field("input", input)
+                .field("input", input==null ? "" : input)
                 .asString();
+        log.info(response.getBody());
+        if (response.getStatus() == 503) {
+            log.error("COMPILE_ERROR");
+            throw new InternalError("COMPILE_ERROR");
+        }
+
         return new JSONObject(response.getBody());
     }
 
