@@ -4,6 +4,7 @@ import com.moodle.server.models.Group;
 import com.moodle.server.services.GroupService;
 import com.moodle.server.services.UserService;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,6 +20,11 @@ public class AdminController {
     public AdminController(GroupService groupService, UserService userService) {
         this.groupService = groupService;
         this.userService = userService;
+    }
+
+    @GetMapping("answers")
+    public String answers(Map<String, Object> model) {
+        return "answers";
     }
 
     @PostMapping("new-group")
@@ -52,6 +58,7 @@ public class AdminController {
         model.put("group", groupId);
         return "redirect:/";
     }
+
 
 
 }
