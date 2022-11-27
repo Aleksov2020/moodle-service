@@ -14,4 +14,6 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     List<UserEntity> findUserEntitiesByGroup_GroupId(Long groupId);
 
     boolean existsByUsername(String username);
+
+    List<UserEntity> findUserEntitiesByLastNameStartsWith(String username);
 }

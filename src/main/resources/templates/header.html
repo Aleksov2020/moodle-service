@@ -20,6 +20,9 @@
                     <li sec:authorize="hasRole('USER')" class="nav-item">
                         <a class="nav-link"  th:href="@{/marks}">Marks</a>
                     </li>
+                    <li sec:authorize="hasRole('ADMIN')" class="nav-item">
+                        <a class="nav-link" th:href="@{/admin/answers}">Answers</a>
+                    </li>
                 </ul>
                 <span class="navbar-text">
                     <a sec:authorize="hasRole('USER')" th:href="@{/profile}"> [[${#httpServletRequest.remoteUser}]] </a>
